@@ -1,9 +1,9 @@
-package io.github.gcdd1993.generator;
+package io.github.gcdd1993.jpa.autogen.generator;
 
-import io.github.gcdd1993.constant.AttributeKey;
-import io.github.gcdd1993.constant.TemplateKey;
-import io.github.gcdd1993.context.ApplicationContext;
-import io.github.gcdd1993.model.EntityInfo;
+import io.github.gcdd1993.jpa.autogen.constant.AttributeKey;
+import io.github.gcdd1993.jpa.autogen.constant.TemplateKey;
+import io.github.gcdd1993.jpa.autogen.context.ApplicationContext;
+import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class ServiceCodeGenerator extends BaseCodeGenerator {
 
-    private static final String DEFAULT_SERVICE_PACKAGE_NAME_SUFFIX = ".service";
+    private static final String DEFAULT_PACKAGE_NAME_SUFFIX = ".service";
 
     public ServiceCodeGenerator(ApplicationContext applicationContext) {
         super(applicationContext);
@@ -26,14 +26,14 @@ public class ServiceCodeGenerator extends BaseCodeGenerator {
     public void beforeGenerate() {
         EntityInfo entityInfo = applicationContext.getAttribute(AttributeKey.ENTITY_INFO, EntityInfo.class);
 
-        String packageName = applicationContext.getOrDefaultAttribute("service.package",
-                entityInfo.getPackageName() + DEFAULT_SERVICE_PACKAGE_NAME_SUFFIX,
+        String packageName = applicationContext.getOrDefaultAttribute(AttributeKey.SERVICE_PACKAGE,
+                entityInfo.getPackageName() + DEFAULT_PACKAGE_NAME_SUFFIX,
                 String.class);
         applicationContext.setAttribute(AttributeKey.PACKAGE_NAME, packageName);
 
         // targetFileName
-        applicationContext.setAttribute(AttributeKey.TARGET_CLASS_NAME, entityInfo.getSimpleName() + applicationContext.getAttribute("service.suffix"));
-        applicationContext.setAttribute(AttributeKey.TEMPLATE_NAME, applicationContext.getAttribute("service.template"));
+        applicationContext.setAttribute(AttributeKey.TARGET_CLASS_NAME, entityInfo.getSimpleName() + applicationContext.getAttribute(AttributeKey.SERVICE_SUFFIX));
+        applicationContext.setAttribute(AttributeKey.TEMPLATE_NAME, applicationContext.getAttribute(AttributeKey.SERVICE_TEMPLATE));
 
         // import repository
         Map<String, Object> params = applicationContext.getAttribute(AttributeKey.PARAMS, Map.class);

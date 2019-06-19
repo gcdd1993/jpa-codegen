@@ -1,4 +1,4 @@
-package io.github.gcdd1993.context;
+package io.github.gcdd1993.jpa.autogen.context;
 
 import java.util.Map;
 

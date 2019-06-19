@@ -1,4 +1,4 @@
-package io.github.gcdd1993.entity;
+package io.github.gcdd1993.jpa.autogen.entity;
 
 import lombok.Data;
 

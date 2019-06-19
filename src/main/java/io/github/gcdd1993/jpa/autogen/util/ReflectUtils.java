@@ -1,4 +1,4 @@
-package io.github.gcdd1993.util;
+package io.github.gcdd1993.jpa.autogen.util;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;

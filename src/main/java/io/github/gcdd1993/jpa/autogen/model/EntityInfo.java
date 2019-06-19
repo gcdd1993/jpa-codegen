@@ -1,6 +1,6 @@
-package io.github.gcdd1993.model;
+package io.github.gcdd1993.jpa.autogen.model;
 
-import io.github.gcdd1993.util.ReflectUtils;
+import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;
 import lombok.Getter;
 
 import javax.persistence.Id;

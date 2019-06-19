@@ -1,7 +1,8 @@
-package io.github.gcdd1993.context;
+package io.github.gcdd1993.jpa.autogen.context;
 
-import io.github.gcdd1993.model.EntityInfo;
-import io.github.gcdd1993.util.ReflectUtils;
+import io.github.gcdd1993.jpa.autogen.constant.AttributeKey;
+import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
+import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +42,7 @@ public class DefaultApplicationContext implements ApplicationContext {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             Object key = entry.getKey();
             Object value = entry.getValue();
-            attributes.put(key.toString(), value);
+            attributes.put(key.toString().replace(".", "_"), value);
         }
 
         refresh();
@@ -73,13 +74,13 @@ public class DefaultApplicationContext implements ApplicationContext {
     }
 
     private void refreshEntityInfo() {
-        List<Class<?>> entityClassList = ReflectUtils.getClassListByAnnotation(getAttribute("entity.package", String.class), Entity.class);
+        List<Class<?>> entityClassList = ReflectUtils.getClassListByAnnotation(getAttribute(AttributeKey.ENTITY_PACKAGE, String.class), Entity.class);
 
         List<EntityInfo> entityInfos = entityClassList.stream().map(EntityInfo::buildFromEntity)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        setAttribute("entityInfos", entityInfos);
+        setAttribute(AttributeKey.ENTITY_INFOS, entityInfos);
     }
 
 }

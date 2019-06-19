@@ -1,4 +1,4 @@
-package io.github.gcdd1993.generator;
+package io.github.gcdd1993.jpa.autogen.generator;
 
 /**
  * TODO

@@ -1,7 +1,8 @@
-package io.github.gcdd1993.constant;
+package io.github.gcdd1993.jpa.autogen.constant;
 
 /**
  * 模板中用到的参数名
+ * 除了这些，也可以使用{@link AttributeKey}中定义的key，以及配置文件中定义的key,同样的'.'会转为'_'
  *
  * @author gaochen
  * Created on 2019/6/20.
@@ -19,6 +20,5 @@ public interface TemplateKey {
 
     String SERVICE_SIMPLE_NAME = "service_simple_name";
     String SERVICE_FULL_NAME = "service_full_name";
-
 
 }

@@ -1,8 +1,8 @@
-import io.github.gcdd1993.context.ApplicationContext;
-import io.github.gcdd1993.context.DefaultApplicationContext;
-import io.github.gcdd1993.generator.ICodeGenerator;
-import io.github.gcdd1993.generator.RepositoryCodeGenerator;
-import io.github.gcdd1993.generator.ServiceCodeGenerator;
+import io.github.gcdd1993.jpa.autogen.context.ApplicationContext;
+import io.github.gcdd1993.jpa.autogen.context.DefaultApplicationContext;
+import io.github.gcdd1993.jpa.autogen.generator.ICodeGenerator;
+import io.github.gcdd1993.jpa.autogen.generator.RepositoryCodeGenerator;
+import io.github.gcdd1993.jpa.autogen.generator.ServiceCodeGenerator;
 import org.junit.Test;
 
 import java.io.IOException;

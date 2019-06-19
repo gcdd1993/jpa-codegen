@@ -1,12 +1,12 @@
-package io.github.gcdd1993.generator;
+package io.github.gcdd1993.jpa.autogen.generator;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import io.github.gcdd1993.constant.AttributeKey;
-import io.github.gcdd1993.constant.TemplateKey;
-import io.github.gcdd1993.context.ApplicationContext;
-import io.github.gcdd1993.model.EntityInfo;
+import io.github.gcdd1993.jpa.autogen.constant.AttributeKey;
+import io.github.gcdd1993.jpa.autogen.constant.TemplateKey;
+import io.github.gcdd1993.jpa.autogen.context.ApplicationContext;
+import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,8 +33,6 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
 
     public BaseCodeGenerator(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-
-        this.applicationContext.setAttribute(AttributeKey.TEMPLATE_PATH, applicationContext.getAttribute("template.basePath"));
     }
 
 
@@ -81,17 +79,16 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
 
         // imports
         String idClassPackage = entityInfo.getIdClass().getPackage().getName();
-        String importIgnorePackage = applicationContext.getAttribute("import.ignore.package");
+        String importIgnorePackage = applicationContext.getAttribute(AttributeKey.IMPORT_IGNORE_PACKAGE);
 
-        if (!importIgnorePackage.contains(idClassPackage) && !applicationContext.getAttribute("entity.package").equals(idClassPackage)) {
+        if (!importIgnorePackage.contains(idClassPackage) && !applicationContext.getAttribute(AttributeKey.ENTITY_PACKAGE).equals(idClassPackage)) {
             params.put(TemplateKey.IMPORTS, Collections.singletonList(entityInfo.getIdClass().getName()));
         }
 
         beforeGenerate();
 
         // put all attributes into params
-        applicationContext.getAttributes()
-                .forEach((k, v) -> params.put(k.replace(".", "_"), v));
+        applicationContext.getAttributes().forEach(params::put);
 
         File file = checkFile();
         if (file == null) {
