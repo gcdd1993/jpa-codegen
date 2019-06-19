@@ -1,5 +1,7 @@
 package io.github.gcdd1993.generator;
 
+import io.github.gcdd1993.constant.AttributeKey;
+import io.github.gcdd1993.constant.TemplateKey;
 import io.github.gcdd1993.context.ApplicationContext;
 import io.github.gcdd1993.model.EntityInfo;
 
@@ -13,6 +15,8 @@ import java.util.Map;
  */
 public class ServiceCodeGenerator extends BaseCodeGenerator {
 
+    private static final String DEFAULT_SERVICE_PACKAGE_NAME_SUFFIX = ".service";
+
     public ServiceCodeGenerator(ApplicationContext applicationContext) {
         super(applicationContext);
     }
@@ -20,32 +24,32 @@ public class ServiceCodeGenerator extends BaseCodeGenerator {
     @SuppressWarnings("unchecked")
     @Override
     public void beforeGenerate() {
-        EntityInfo entityInfo = applicationContext.getAttribute("entityInfo", EntityInfo.class);
+        EntityInfo entityInfo = applicationContext.getAttribute(AttributeKey.ENTITY_INFO, EntityInfo.class);
 
         String packageName = applicationContext.getOrDefaultAttribute("service.package",
-                entityInfo.getPackageName() + ".service",
+                entityInfo.getPackageName() + DEFAULT_SERVICE_PACKAGE_NAME_SUFFIX,
                 String.class);
-        applicationContext.setAttribute("packageName", packageName);
+        applicationContext.setAttribute(AttributeKey.PACKAGE_NAME, packageName);
 
         // targetFileName
-        applicationContext.setAttribute("targetClassName", entityInfo.getSimpleName() + applicationContext.getAttribute("service.suffix"));
-        applicationContext.setAttribute("templateName", applicationContext.getAttribute("service.template"));
+        applicationContext.setAttribute(AttributeKey.TARGET_CLASS_NAME, entityInfo.getSimpleName() + applicationContext.getAttribute("service.suffix"));
+        applicationContext.setAttribute(AttributeKey.TEMPLATE_NAME, applicationContext.getAttribute("service.template"));
 
         // import repository
-        Map<String, Object> params = applicationContext.getAttribute("params", Map.class);
+        Map<String, Object> params = applicationContext.getAttribute(AttributeKey.PARAMS, Map.class);
 
-        params.put("repository_simple_name", this.applicationContext.getAttribute("repository_simple_name_" + entityInfo.getSimpleName()));
-        params.put("repository_full_name", this.applicationContext.getAttribute("repository_full_name_" + entityInfo.getSimpleName()));
+        params.put(TemplateKey.REPOSITORY_SIMPLE_NAME, this.applicationContext.getAttribute(AttributeKey.REPOSITORY_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName()));
+        params.put(TemplateKey.REPOSITORY_FULL_NAME, this.applicationContext.getAttribute(TemplateKey.REPOSITORY_FULL_NAME + entityInfo.getSimpleName()));
     }
 
     @Override
     public void afterGenerate() {
-        EntityInfo entityInfo = applicationContext.getAttribute("entityInfo", EntityInfo.class);
-        String packageName = applicationContext.getAttribute("packageName");
-        String targetClassName = applicationContext.getAttribute("targetClassName");
+        EntityInfo entityInfo = applicationContext.getAttribute(AttributeKey.ENTITY_INFO, EntityInfo.class);
+        String packageName = applicationContext.getAttribute(AttributeKey.PACKAGE_NAME);
+        String targetClassName = applicationContext.getAttribute(AttributeKey.TARGET_CLASS_NAME);
 
-        this.applicationContext.setAttribute("service_simple_name_" + entityInfo.getSimpleName(), targetClassName);
-        this.applicationContext.setAttribute("service_full_name_" + entityInfo.getSimpleName(), packageName + "." + targetClassName);
+        this.applicationContext.setAttribute(AttributeKey.SERVICE_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName(), targetClassName);
+        this.applicationContext.setAttribute(AttributeKey.SERVICE_FULL_NAME_PREFIX + entityInfo.getSimpleName(), packageName + "." + targetClassName);
     }
 
 }

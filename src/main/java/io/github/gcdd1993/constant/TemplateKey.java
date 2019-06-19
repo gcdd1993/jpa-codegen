@@ -13,4 +13,12 @@ public interface TemplateKey {
     String ENTITY = "entity";
     String DATE = "date";
     String COMMENTS = "comments";
+
+    String REPOSITORY_SIMPLE_NAME = "repository_simple_name";
+    String REPOSITORY_FULL_NAME = "repository_full_name";
+
+    String SERVICE_SIMPLE_NAME = "service_simple_name";
+    String SERVICE_FULL_NAME = "service_full_name";
+
+
 }

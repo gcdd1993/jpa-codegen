@@ -1,5 +1,6 @@
 package io.github.gcdd1993.generator;
 
+import io.github.gcdd1993.constant.AttributeKey;
 import io.github.gcdd1993.context.ApplicationContext;
 import io.github.gcdd1993.model.EntityInfo;
 
@@ -17,25 +18,25 @@ public class RepositoryCodeGenerator extends BaseCodeGenerator {
 
     @Override
     public void beforeGenerate() {
-        EntityInfo entityInfo = applicationContext.getAttribute("entityInfo", EntityInfo.class);
+        EntityInfo entityInfo = applicationContext.getAttribute(AttributeKey.ENTITY_INFO, EntityInfo.class);
 
         String packageName = applicationContext.getOrDefaultAttribute("repository.package", entityInfo.getPackageName() + ".repository", String.class);
-        applicationContext.setAttribute("packageName", packageName);
+        applicationContext.setAttribute(AttributeKey.PACKAGE_NAME, packageName);
 
         // targetFileName
-        applicationContext.setAttribute("targetClassName", entityInfo.getSimpleName() + applicationContext.getAttribute("repository.suffix"));
-        applicationContext.setAttribute("templateName", applicationContext.getAttribute("repository.template"));
+        applicationContext.setAttribute(AttributeKey.TARGET_CLASS_NAME, entityInfo.getSimpleName() + applicationContext.getAttribute("repository.suffix"));
+        applicationContext.setAttribute(AttributeKey.TEMPLATE_NAME, applicationContext.getAttribute("repository.template"));
 
     }
 
     @Override
     public void afterGenerate() {
-        EntityInfo entityInfo = applicationContext.getAttribute("entityInfo", EntityInfo.class);
-        String packageName = applicationContext.getAttribute("packageName");
-        String targetClassName = applicationContext.getAttribute("targetClassName");
+        EntityInfo entityInfo = applicationContext.getAttribute(AttributeKey.ENTITY_INFO, EntityInfo.class);
+        String packageName = applicationContext.getAttribute(AttributeKey.PACKAGE_NAME);
+        String targetClassName = applicationContext.getAttribute(AttributeKey.TARGET_CLASS_NAME);
 
-        this.applicationContext.setAttribute("repository_simple_name_" + entityInfo.getSimpleName(), targetClassName);
-        this.applicationContext.setAttribute("repository_full_name_" + entityInfo.getSimpleName(), packageName + "." + targetClassName);
+        this.applicationContext.setAttribute(AttributeKey.REPOSITORY_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName(), targetClassName);
+        this.applicationContext.setAttribute(AttributeKey.REPOSITORY_FULL_NAME_PREFIX + entityInfo.getSimpleName(), packageName + "." + targetClassName);
     }
 
 }

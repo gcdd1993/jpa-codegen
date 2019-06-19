@@ -15,4 +15,11 @@ public interface AttributeKey {
     String ENTITY_INFOS = "entity_infos";
     String PARAMS = "params";
     String TEMPLATE_NAME = "template_name";
+
+    String REPOSITORY_SIMPLE_NAME_PREFIX = "repository_simple_name_";
+    String REPOSITORY_FULL_NAME_PREFIX = "repository_full_name_";
+
+    String SERVICE_SIMPLE_NAME_PREFIX = "service_simple_name_";
+    String SERVICE_FULL_NAME_PREFIX = "service_full_name_";
+
 }
