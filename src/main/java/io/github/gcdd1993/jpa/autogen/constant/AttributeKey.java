@@ -14,8 +14,11 @@ public interface AttributeKey {
     String FORCE_OVERRIDE = "force_override";
     String ENTITY_INFO = "entity_info";
     String ENTITY_INFOS = "entity_infos";
-    String PARAMS = "params";
     String TEMPLATE_NAME = "template_name";
+    String DATE = "date";
+    String IMPORTS = "imports";
+    String SIMPLE_CLASS_NAME = "simple_class_name";
+    String FULL_CLASS_NAME = "full_class_name";
 
     String REPOSITORY_SIMPLE_NAME_PREFIX = "repository_simple_name_";
     String REPOSITORY_FULL_NAME_PREFIX = "repository_full_name_";
@@ -28,6 +31,18 @@ public interface AttributeKey {
     String SERVICE_PACKAGE = "service_package";
     String SERVICE_SUFFIX = "service_suffix";
     String SERVICE_TEMPLATE = "service_template";
+
+    String FORM_SIMPLE_NAME_PREFIX = "form_simple_name_";
+    String FORM_FULL_NAME_PREFIX = "form_full_name_";
+    String FORM_PACKAGE = "form_package";
+    String FORM_SUFFIX = "form_suffix";
+    String FORM_TEMPLATE = "form_template";
+
+    String CONTROLLER_SIMPLE_NAME_PREFIX = "controller_simple_name_";
+    String CONTROLLER_FULL_NAME_PREFIX = "controller_full_name_";
+    String CONTROLLER_PACKAGE = "controller_package";
+    String CONTROLLER_SUFFIX = "controller_suffix";
+    String CONTROLLER_TEMPLATE = "controller_template";
 
     String ENTITY_PACKAGE = "entity_package";
     String IMPORT_IGNORE_PACKAGE = "import_ignore_package";

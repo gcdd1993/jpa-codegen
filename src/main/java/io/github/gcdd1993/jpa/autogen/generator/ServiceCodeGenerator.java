@@ -1,11 +1,8 @@
 package io.github.gcdd1993.jpa.autogen.generator;
 
 import io.github.gcdd1993.jpa.autogen.constant.AttributeKey;
-import io.github.gcdd1993.jpa.autogen.constant.TemplateKey;
 import io.github.gcdd1993.jpa.autogen.context.ApplicationContext;
 import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
-
-import java.util.Map;
 
 /**
  * Service 代码生成器
@@ -36,10 +33,8 @@ public class ServiceCodeGenerator extends BaseCodeGenerator {
         applicationContext.setAttribute(AttributeKey.TEMPLATE_NAME, applicationContext.getAttribute(AttributeKey.SERVICE_TEMPLATE));
 
         // import repository
-        Map<String, Object> params = applicationContext.getAttribute(AttributeKey.PARAMS, Map.class);
-
-        params.put(TemplateKey.REPOSITORY_SIMPLE_NAME, this.applicationContext.getAttribute(AttributeKey.REPOSITORY_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName()));
-        params.put(TemplateKey.REPOSITORY_FULL_NAME, this.applicationContext.getAttribute(TemplateKey.REPOSITORY_FULL_NAME + entityInfo.getSimpleName()));
+        applicationContext.setAttribute(AttributeKey.SIMPLE_CLASS_NAME, applicationContext.getAttribute(AttributeKey.REPOSITORY_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName()));
+        applicationContext.setAttribute(AttributeKey.FULL_CLASS_NAME, applicationContext.getAttribute(AttributeKey.REPOSITORY_FULL_NAME_PREFIX + entityInfo.getSimpleName()));
     }
 
     @Override
@@ -48,8 +43,8 @@ public class ServiceCodeGenerator extends BaseCodeGenerator {
         String packageName = applicationContext.getAttribute(AttributeKey.PACKAGE_NAME);
         String targetClassName = applicationContext.getAttribute(AttributeKey.TARGET_CLASS_NAME);
 
-        this.applicationContext.setAttribute(AttributeKey.SERVICE_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName(), targetClassName);
-        this.applicationContext.setAttribute(AttributeKey.SERVICE_FULL_NAME_PREFIX + entityInfo.getSimpleName(), packageName + "." + targetClassName);
+        applicationContext.setAttribute(AttributeKey.SERVICE_SIMPLE_NAME_PREFIX + entityInfo.getSimpleName(), targetClassName);
+        applicationContext.setAttribute(AttributeKey.SERVICE_FULL_NAME_PREFIX + entityInfo.getSimpleName(), packageName + "." + targetClassName);
     }
 
 }

@@ -4,7 +4,6 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.github.gcdd1993.jpa.autogen.constant.AttributeKey;
-import io.github.gcdd1993.jpa.autogen.constant.TemplateKey;
 import io.github.gcdd1993.jpa.autogen.context.ApplicationContext;
 import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
 
@@ -15,9 +14,9 @@ import java.io.Writer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * TODO
@@ -34,7 +33,6 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
     public BaseCodeGenerator(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
-
 
     /**
      * 解析文件存放位置
@@ -70,24 +68,21 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
     @SuppressWarnings("unchecked")
     public void generate(EntityInfo entityInfo) {
         applicationContext.setAttribute(AttributeKey.ENTITY_INFO, entityInfo);
-        applicationContext.setAttribute(AttributeKey.PARAMS, new ConcurrentHashMap<>(256));
         // 设置公用模板参数
-        Map<String, Object> params = applicationContext.getAttribute(AttributeKey.PARAMS, Map.class);
-        params.put(TemplateKey.ENTITY, entityInfo);
-
-        params.put(TemplateKey.DATE, DATE_TIME_FORMATTER.format(LocalDate.now()));
+        applicationContext.setAttribute(AttributeKey.DATE, DATE_TIME_FORMATTER.format(LocalDate.now()));
 
         // imports
         String idClassPackage = entityInfo.getIdClass().getPackage().getName();
         String importIgnorePackage = applicationContext.getAttribute(AttributeKey.IMPORT_IGNORE_PACKAGE);
 
         if (!importIgnorePackage.contains(idClassPackage) && !applicationContext.getAttribute(AttributeKey.ENTITY_PACKAGE).equals(idClassPackage)) {
-            params.put(TemplateKey.IMPORTS, Collections.singletonList(entityInfo.getIdClass().getName()));
+            applicationContext.setAttribute(AttributeKey.IMPORTS, Collections.singletonList(entityInfo.getIdClass().getName()));
         }
 
         beforeGenerate();
 
         // put all attributes into params
+        Map<String, Object> params = new HashMap<>(256);
         applicationContext.getAttributes().forEach(params::put);
 
         File file = checkFile();
