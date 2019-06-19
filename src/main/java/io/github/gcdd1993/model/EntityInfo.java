@@ -6,6 +6,8 @@ import lombok.Getter;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 实体信息
@@ -40,6 +42,11 @@ public class EntityInfo {
     private String packageName;
 
     /**
+     * 所有< 属性名, 类 >
+     */
+    private Map<String, Class<?>> fields;
+
+    /**
      * 通过反射获取实体类属性
      *
      * @param clazz 实体类
@@ -66,9 +73,14 @@ public class EntityInfo {
         entityInfo.simpleName = clazz.getSimpleName();
         entityInfo.packageName = clazz.getPackage().getName();
 
+        entityInfo.fields = new HashMap<>(256);
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (Field field : declaredFields) {
+            entityInfo.fields.put(field.getName(), field.getType());
+        }
+
         return entityInfo;
 
     }
-
 
 }

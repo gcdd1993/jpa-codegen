@@ -34,7 +34,8 @@ public class RepositoryCodeGenerator extends BaseCodeGenerator {
         String packageName = applicationContext.getAttribute("packageName");
         String targetClassName = applicationContext.getAttribute("targetClassName");
 
-        this.applicationContext.setAttribute("repository_" + entityInfo.getSimpleName(), packageName + "." + targetClassName);
+        this.applicationContext.setAttribute("repository_simple_name_" + entityInfo.getSimpleName(), targetClassName);
+        this.applicationContext.setAttribute("repository_full_name_" + entityInfo.getSimpleName(), packageName + "." + targetClassName);
     }
 
 }

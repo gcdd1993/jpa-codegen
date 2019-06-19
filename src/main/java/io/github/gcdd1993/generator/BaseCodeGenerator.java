@@ -3,6 +3,8 @@ package io.github.gcdd1993.generator;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import io.github.gcdd1993.constant.AttributeKey;
+import io.github.gcdd1993.constant.TemplateKey;
 import io.github.gcdd1993.context.ApplicationContext;
 import io.github.gcdd1993.model.EntityInfo;
 
@@ -32,7 +34,7 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
     public BaseCodeGenerator(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
 
-        this.applicationContext.setAttribute("templatePath", applicationContext.getAttribute("template.basePath"));
+        this.applicationContext.setAttribute(AttributeKey.TEMPLATE_PATH, applicationContext.getAttribute("template.basePath"));
     }
 
 
@@ -42,7 +44,7 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
      * @return 文件存放位置
      */
     private String parseTargetPath() {
-        return "src/main/java/" + applicationContext.getAttribute("packageName").replace(".", "/") + "/";
+        return "src/main/java/" + applicationContext.getAttribute(AttributeKey.PACKAGE_NAME).replace(".", "/") + "/";
     }
 
     /**
@@ -57,9 +59,9 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String finalFileName = targetPath + applicationContext.getAttribute("targetClassName") + ".java";
+        String finalFileName = targetPath + applicationContext.getAttribute(AttributeKey.TARGET_CLASS_NAME) + ".java";
         File nFile = new File(finalFileName);
-        if (nFile.exists() && !applicationContext.getAttribute("forceOverride", Boolean.class)) {
+        if (nFile.exists() && !applicationContext.getAttribute(AttributeKey.FORCE_OVERRIDE, Boolean.class)) {
             System.out.println("File \'" + finalFileName + "\' already exists, Skipped.");
             return null;
         } else {
@@ -69,27 +71,27 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
 
     @SuppressWarnings("unchecked")
     public void generate(EntityInfo entityInfo) {
-        applicationContext.setAttribute("entityInfo", entityInfo);
-        applicationContext.setAttribute("params", new ConcurrentHashMap<>(256));
+        applicationContext.setAttribute(AttributeKey.ENTITY_INFO, entityInfo);
+        applicationContext.setAttribute(AttributeKey.PARAMS, new ConcurrentHashMap<>(256));
         // 设置公用模板参数
-        Map<String, Object> params = applicationContext.getAttribute("params", Map.class);
-        params.put("entity", entityInfo);
+        Map<String, Object> params = applicationContext.getAttribute(AttributeKey.PARAMS, Map.class);
+        params.put(TemplateKey.ENTITY, entityInfo);
 
-        params.put("date", DATE_TIME_FORMATTER.format(LocalDate.now()));
-
-        // put all config into params
-        applicationContext.getAttributes()
-                .forEach((k, v) -> params.put(k.replace(".", "_"), v));
+        params.put(TemplateKey.DATE, DATE_TIME_FORMATTER.format(LocalDate.now()));
 
         // imports
         String idClassPackage = entityInfo.getIdClass().getPackage().getName();
         String importIgnorePackage = applicationContext.getAttribute("import.ignore.package");
 
         if (!importIgnorePackage.contains(idClassPackage) && !applicationContext.getAttribute("entity.package").equals(idClassPackage)) {
-            params.put("imports", Collections.singletonList(entityInfo.getIdClass().getName()));
+            params.put(TemplateKey.IMPORTS, Collections.singletonList(entityInfo.getIdClass().getName()));
         }
 
         beforeGenerate();
+
+        // put all attributes into params
+        applicationContext.getAttributes()
+                .forEach((k, v) -> params.put(k.replace(".", "_"), v));
 
         File file = checkFile();
         if (file == null) {
@@ -101,8 +103,8 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
             writer = new FileWriter(file);
 
             Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-            Template template = configuration.getTemplate(applicationContext.getAttribute("templatePath") +
-                    applicationContext.getAttribute("templateName"));
+            Template template = configuration.getTemplate(applicationContext.getAttribute(AttributeKey.TEMPLATE_PATH) +
+                    applicationContext.getAttribute(AttributeKey.TEMPLATE_NAME));
 
             template.process(params, writer);
 
@@ -120,6 +122,14 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public final void generate() {
+        List<EntityInfo> entityInfos = applicationContext.getAttribute(AttributeKey.ENTITY_INFOS, List.class);
+
+        entityInfos.forEach(this::generate);
+    }
+
     /**
      * 处理前回调
      */
@@ -130,11 +140,4 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
      */
     public abstract void afterGenerate();
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void generate() {
-        List<EntityInfo> entityInfos = applicationContext.getAttribute("entityInfos", List.class);
-
-        entityInfos.forEach(this::generate);
-    }
 }

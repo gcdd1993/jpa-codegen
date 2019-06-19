@@ -2,6 +2,7 @@ import io.github.gcdd1993.context.ApplicationContext;
 import io.github.gcdd1993.context.DefaultApplicationContext;
 import io.github.gcdd1993.generator.ICodeGenerator;
 import io.github.gcdd1993.generator.RepositoryCodeGenerator;
+import io.github.gcdd1993.generator.ServiceCodeGenerator;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -19,8 +20,12 @@ public class ApplicationTest {
         String configFile = "codegen.conf";
 
         ApplicationContext applicationContext = new DefaultApplicationContext(ApplicationTest.class.getResourceAsStream("/codegen.properties"));
-        ICodeGenerator codeGenerator = new RepositoryCodeGenerator(applicationContext);
 
-        codeGenerator.generate();
+        ICodeGenerator repositoryCodeGenerator = new RepositoryCodeGenerator(applicationContext);
+        ICodeGenerator serviceCodeGenerator = new ServiceCodeGenerator(applicationContext);
+
+        repositoryCodeGenerator.generate();
+        serviceCodeGenerator.generate();
+
     }
 }

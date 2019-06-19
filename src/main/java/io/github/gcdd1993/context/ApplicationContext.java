@@ -10,6 +10,12 @@ import java.util.Map;
  */
 public interface ApplicationContext {
 
+
+    /**
+     * 设置全局变量
+     * @param name 变量名
+     * @param value 值
+     */
     void setAttribute(String name, Object value);
 
     String getAttribute(String name);

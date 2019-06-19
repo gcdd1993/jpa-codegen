@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 /**
@@ -15,7 +14,6 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@IdClass(User.class)
 @Table(name = "sys_permission")
 public class Permission {
 

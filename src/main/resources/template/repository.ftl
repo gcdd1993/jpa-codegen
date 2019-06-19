@@ -1,4 +1,4 @@
-package ${repository_package};
+package ${packageName};
 
 import ${entity.fullName};
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +10,7 @@ import ${import};
 
 /**
  * ${comments}
+ *
  * @author ${author}
  * Created On ${date}.
  */
