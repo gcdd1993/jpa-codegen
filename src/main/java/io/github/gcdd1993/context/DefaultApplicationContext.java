@@ -1,12 +1,21 @@
 package io.github.gcdd1993.context;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
+import io.github.gcdd1993.model.EntityInfo;
+import io.github.gcdd1993.util.ReflectUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.Entity;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * TODO
@@ -17,19 +26,25 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class DefaultApplicationContext implements ApplicationContext {
 
-    public DefaultApplicationContext(String configLocation) {
-        Config config = ConfigFactory.load(configLocation);
-        this.environment = new Environment(config);
+    @Getter
+    private final Map<String, Object> attributes = new ConcurrentHashMap<>(256);
+
+    public DefaultApplicationContext(String configLocation) throws IOException {
+        this(new FileInputStream(new File(configLocation)));
     }
 
-    private Map<String, Object> attributes = new ConcurrentHashMap<>();
+    public DefaultApplicationContext(InputStream inputStream) throws IOException {
+        Properties properties = new Properties();
+        properties.load(inputStream);
 
-    @Getter
-    private final Environment environment;
+        // move all properties into application context attributes
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            Object key = entry.getKey();
+            Object value = entry.getValue();
+            attributes.put(key.toString(), value);
+        }
 
-    @Override
-    public Object getAttribute(String name) {
-        return attributes.get(name);
+        refresh();
     }
 
     @Override
@@ -38,15 +53,33 @@ public class DefaultApplicationContext implements ApplicationContext {
     }
 
     @Override
+    public String getAttribute(String name) {
+        return getAttribute(name, String.class);
+    }
+
+    @Override
+    public <V> V getAttribute(String name, Class<V> vClass) {
+        return vClass.cast(attributes.get(name));
+    }
+
+    @Override
+    public <V> V getOrDefaultAttribute(String name, V defaultValue, Class<V> vClass) {
+        return vClass.cast(attributes.getOrDefault(name, vClass));
+    }
+
+    @Override
     public void refresh() {
-        prepareRefresh();
-
-
+        refreshEntityInfo();
     }
 
-    private void prepareRefresh() {
+    private void refreshEntityInfo() {
+        List<Class<?>> entityClassList = ReflectUtils.getClassListByAnnotation(getAttribute("entity.package", String.class), Entity.class);
 
+        List<EntityInfo> entityInfos = entityClassList.stream().map(EntityInfo::buildFromEntity)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        setAttribute("entityInfos", entityInfos);
     }
-
 
 }

@@ -1,5 +1,7 @@
 package io.github.gcdd1993.context;
 
+import java.util.Map;
+
 /**
  * TODO
  *
@@ -8,28 +10,15 @@ package io.github.gcdd1993.context;
  */
 public interface ApplicationContext {
 
-    /**
-     * 运行时环境
-     *
-     * @return 环境
-     */
-    Environment getEnvironment();
-
-    /**
-     * 获取全局变量
-     *
-     * @param name 名称
-     * @return 值
-     */
-    Object getAttribute(String name);
-
-    /**
-     * 设置全局变量
-     *
-     * @param name  名称
-     * @param value 值
-     */
     void setAttribute(String name, Object value);
+
+    String getAttribute(String name);
+
+    <V> V getAttribute(String name, Class<V> vClass);
+
+    <V> V getOrDefaultAttribute(String name, V defaultValue, Class<V> vClass);
+
+    Map<String, Object> getAttributes();
 
     /**
      * 刷新上下文，加载配置以及资源
