@@ -1,16 +1,11 @@
 package io.github.gcdd1993.jpa.autogen.generator;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import io.github.gcdd1993.jpa.autogen.constant.AttributeKey;
 import io.github.gcdd1993.jpa.autogen.context.ApplicationContext;
 import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
+import io.github.gcdd1993.jpa.autogen.util.FreeMarkerUtils;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -29,6 +24,8 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
     protected ApplicationContext applicationContext;
+
+    protected ICodeGenerator nextCodeGenerator;
 
     public BaseCodeGenerator(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -85,32 +82,14 @@ public abstract class BaseCodeGenerator implements ICodeGenerator {
         Map<String, Object> params = new HashMap<>(256);
         applicationContext.getAttributes().forEach(params::put);
 
-        File file = checkFile();
-        if (file == null) {
-            return;
-        }
+        FreeMarkerUtils.process(params, parseTargetPath(),checkFile());
 
-        Writer writer = null;
-        try {
-            writer = new FileWriter(file);
+        afterGenerate();
 
-            Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-            Template template = configuration.getTemplate(applicationContext.getAttribute(AttributeKey.TEMPLATE_PATH) +
-                    applicationContext.getAttribute(AttributeKey.TEMPLATE_NAME));
-
-            template.process(params, writer);
-
-            afterGenerate();
-        } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (nextCodeGenerator != null) {
+            nextCodeGenerator.generate();
+        } else {
+            System.out.println(String.format("entity %s generate done.", entityInfo.getSimpleName()));
         }
     }
 

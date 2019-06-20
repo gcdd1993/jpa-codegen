@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -31,7 +29,7 @@ public class DefaultApplicationContext implements ApplicationContext {
     private final Map<String, Object> attributes = new ConcurrentHashMap<>(256);
 
     public DefaultApplicationContext(String configLocation) throws IOException {
-        this(new FileInputStream(new File(configLocation)));
+        this(DefaultApplicationContext.class.getResourceAsStream(configLocation));
     }
 
     public DefaultApplicationContext(InputStream inputStream) throws IOException {
@@ -65,7 +63,7 @@ public class DefaultApplicationContext implements ApplicationContext {
 
     @Override
     public <V> V getOrDefaultAttribute(String name, V defaultValue, Class<V> vClass) {
-        return vClass.cast(attributes.getOrDefault(name, vClass));
+        return vClass.cast(attributes.getOrDefault(name, defaultValue));
     }
 
     @Override
