@@ -14,5 +14,5 @@ import ${import};
  * @author ${author}
  * Created On ${date}.
  */
-public interface ${entity.simpleName}${repository_suffix} extends JpaRepository<${entity.simpleName}, ${entity.idClass.simpleName}> {
+public interface ${className} extends JpaRepository<${entity.simpleName}, ${entity.idClass.simpleName}> {
 }

@@ -1,6 +1,5 @@
-import io.github.gcdd1993.jpa.autogen.AutoGenTask;
-import io.github.gcdd1993.jpa.autogen.generator.RepositoryCodeGenerator;
-import io.github.gcdd1993.jpa.autogen.generator.ServiceCodeGenerator;
+import io.github.gcdd1993.jpa.autogen.CodeGenerator;
+import io.github.gcdd1993.jpa.autogen.render.RepositoryRender;
 import org.junit.Test;
 
 /**
@@ -14,10 +13,9 @@ public class ApplicationTest {
     @Test
     public void generate() {
 
-        new AutoGenTask("/codegen.properties")
-                .registerTask(RepositoryCodeGenerator.class)
-                .registerTask(ServiceCodeGenerator.class)
-                .run();
+        new CodeGenerator("/codegen.properties")
+                .registerRender(RepositoryRender.class)
+                .generate();
 
     }
 }
