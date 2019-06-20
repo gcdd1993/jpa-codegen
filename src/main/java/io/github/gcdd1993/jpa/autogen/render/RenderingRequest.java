@@ -23,7 +23,7 @@ public class RenderingRequest {
     private String author;
     private String date;
     private String comments;
-    private List<String> fields;
+    private List<EntityInfo.FieldItem> fields;
     private EntityInfo entity;
     private Map<String, RenderingResponse> lastRenderResponse;
 }

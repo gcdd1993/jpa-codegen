@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ${entity.fullName};
 import ${lastRenderResponse.repository.packageName}.${lastRenderResponse.repository.className};
+import ${lastRenderResponse.form.packageName}.${lastRenderResponse.form.className};
 <#if imports??>
 <#list imports as import>
 import ${import};
@@ -26,7 +27,7 @@ public class ${className} {
     @Autowired
     private ${lastRenderResponse.repository.className} ${lastRenderResponse.repository.className?uncap_first};
 
-    public ${entity.simpleName} create(${entity.simpleName}Form form) {
+    public ${entity.simpleName} create(${lastRenderResponse.form.className} form) {
         ${entity.simpleName} ${entity.simpleName?uncap_first} = new ${entity.simpleName}();
         BeanUtils.copyProperties(form, ${entity.simpleName?uncap_first});
         // TODO
@@ -38,7 +39,7 @@ public class ${className} {
                 .ifPresent(${lastRenderResponse.repository.className?uncap_first}::delete);
     }
 
-    public Optional<${entity.simpleName}> update(${entity.simpleName}Form form, ${entity.idClass.simpleName} id) {
+    public Optional<${entity.simpleName}> update(${lastRenderResponse.form.className} form, ${entity.idClass.simpleName} id) {
         return ${lastRenderResponse.repository.className?uncap_first}.findById(id)
                 .map(${entity.simpleName?uncap_first} -> {
                     BeanUtils.copyProperties(form, ${entity.simpleName?uncap_first});
@@ -46,7 +47,7 @@ public class ${className} {
                 });
     }
 
-    public Optional<${entity.simpleName}> get(Long id) {
+    public Optional<${entity.simpleName}> get(${entity.idClass.simpleName} id) {
         return ${lastRenderResponse.repository.className?uncap_first}.findById(id);
     }
 

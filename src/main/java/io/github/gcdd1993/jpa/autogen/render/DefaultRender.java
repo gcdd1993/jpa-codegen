@@ -42,6 +42,9 @@ public class DefaultRender implements IRender {
         renderingRequest.setComments(config.getComments());
         renderingRequest.setDate(config.getDate());
 
+        // fields ，只支持基本类型映射
+        renderingRequest.setFields(entityInfo.getFields());
+
         // use freemarker to render code.
         RenderingResponse lastRenderingResponse = FreeMarkerUtils.process(renderingRequest);
 

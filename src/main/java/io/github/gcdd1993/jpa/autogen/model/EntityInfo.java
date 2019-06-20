@@ -1,13 +1,14 @@
 package io.github.gcdd1993.jpa.autogen.model;
 
 import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;
+import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 实体信息
@@ -44,7 +45,7 @@ public class EntityInfo {
     /**
      * 所有< 属性名, 类 >
      */
-    private Map<String, Class<?>> fields;
+    private List<FieldItem> fields;
 
     /**
      * 通过反射获取实体类属性
@@ -73,14 +74,27 @@ public class EntityInfo {
         entityInfo.simpleName = clazz.getSimpleName();
         entityInfo.packageName = clazz.getPackage().getName();
 
-        entityInfo.fields = new HashMap<>(256);
+        entityInfo.fields = new ArrayList<>();
         Field[] declaredFields = clazz.getDeclaredFields();
         for (Field field : declaredFields) {
-            entityInfo.fields.put(field.getName(), field.getType());
+            boolean javaLangType = field.getType().getPackage().getName().contains("java.lang");
+            Id idAnnotation = field.getAnnotation(Id.class);
+            if (javaLangType && idAnnotation == null) {
+                FieldItem fieldItem = new FieldItem();
+                fieldItem.setClassName(field.getType().getSimpleName());
+                fieldItem.setName(field.getName());
+                entityInfo.fields.add(fieldItem);
+            }
         }
 
         return entityInfo;
 
+    }
+
+    @Data
+    public static class FieldItem {
+        private String className;
+        private String name;
     }
 
 }

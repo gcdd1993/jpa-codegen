@@ -13,8 +13,10 @@ public class ApplicationTest {
     public void generate() {
 
         new CodeGenerator("/codegen.properties")
+                .registerRender("form")
                 .registerRender("repository")
                 .registerRender("service")
+                .registerRender("controller")
                 .generate();
 
     }
