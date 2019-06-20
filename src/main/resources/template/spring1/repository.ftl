@@ -1,6 +1,6 @@
 package ${packageName};
 
-import ${entity.fullName};
+import ${entity.packageName}.${entity.className};
 import org.springframework.data.jpa.repository.JpaRepository;
 <#if imports??>
 <#list imports as import>
@@ -14,5 +14,5 @@ import ${import};
  * @author ${author}
  * Created On ${date}.
  */
-public interface ${className} extends JpaRepository<${entity.simpleName}, ${entity.idClass.simpleName}> {
+public interface ${className} extends JpaRepository<${entity.className}, ${entity.idClassName}> {
 }

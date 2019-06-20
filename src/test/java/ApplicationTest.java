@@ -12,7 +12,7 @@ public class ApplicationTest {
     @Test
     public void generate() {
 
-        new CodeGenerator("/codegen.properties")
+        new CodeGenerator("/example.properties")
                 .registerRender("form")
                 .registerRender("repository")
                 .registerRender("service")

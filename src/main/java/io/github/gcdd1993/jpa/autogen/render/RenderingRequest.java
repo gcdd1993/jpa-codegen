@@ -17,8 +17,7 @@ public class RenderingRequest {
     private String ftlName;
     private String savePath;
     private String packageName;
-    private boolean forceOverride;
-    private List<String> imports;
+    private boolean cover;
     private String className;
     private String author;
     private String date;
@@ -26,4 +25,5 @@ public class RenderingRequest {
     private List<EntityInfo.FieldItem> fields;
     private EntityInfo entity;
     private Map<String, RenderingResponse> lastRenderResponse;
+    private Map<String, String> otherParams;
 }

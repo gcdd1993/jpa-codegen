@@ -76,7 +76,7 @@ public class FreeMarkerUtils {
         }
         String finalFileName = savePath + fileName;
         File nFile = new File(finalFileName);
-        if (nFile.exists() && !renderingRequest.isForceOverride()) {
+        if (nFile.exists() && !renderingRequest.isCover()) {
             System.out.println("File \'" + finalFileName + "\' already exists, Skipped.");
             return null;
         } else {

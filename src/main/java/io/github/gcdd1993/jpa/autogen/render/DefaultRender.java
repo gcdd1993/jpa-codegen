@@ -5,8 +5,7 @@ import io.github.gcdd1993.jpa.autogen.config.ModuleConfig;
 import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
 import io.github.gcdd1993.jpa.autogen.util.FreeMarkerUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO
@@ -31,10 +30,17 @@ public class DefaultRender implements IRender {
         renderingRequest.setLastRenderResponse(lastRenderingResponseMap);
 
         ModuleConfig moduleConfig = config.getModuleConfigMap().get(module);
-        renderingRequest.setClassName(entityInfo.getSimpleName() + moduleConfig.getClassNameSuffix());
-        renderingRequest.setPackageName(moduleConfig.getPackageName());
+        renderingRequest.setClassName(entityInfo.getClassName() + moduleConfig.getClassNameSuffix());
+        if (moduleConfig.getPackageName() != null) {
+            renderingRequest.setPackageName(moduleConfig.getPackageName());
+            renderingRequest.setSavePath(moduleConfig.getSavePath());
+        } else {
+            String packageName = entityInfo.getPackageName().replace(config.getEntityFlag(), module);
+            renderingRequest.setPackageName(packageName);
+            renderingRequest.setSavePath("src/main/java/" + packageName.replace(".", "/") + "/");
+        }
         renderingRequest.setFtlName(moduleConfig.getFtlName());
-        renderingRequest.setSavePath(moduleConfig.getSavePath());
+        renderingRequest.setCover(config.isCover());
 
         renderingRequest.setEntity(entityInfo);
 
@@ -44,6 +50,7 @@ public class DefaultRender implements IRender {
 
         // fields ，只支持基本类型映射
         renderingRequest.setFields(entityInfo.getFields());
+        renderingRequest.setOtherParams(config.getOtherParams());
 
         // use freemarker to render code.
         RenderingResponse lastRenderingResponse = FreeMarkerUtils.process(renderingRequest);

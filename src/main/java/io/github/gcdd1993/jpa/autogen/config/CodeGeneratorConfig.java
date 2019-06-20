@@ -14,12 +14,14 @@ import java.util.Map;
 @Data
 public class CodeGeneratorConfig {
     private String entityPackage;
-    private String basePackage;
+    private String entityFlag;
     private String ftlPath;
     private String author;
     private String date;
     private String comments;
-    private boolean forceOverride;
+    private boolean cover;
 
     private Map<String, ModuleConfig> moduleConfigMap = new HashMap<>();
+
+    private Map<String, String> otherParams;
 }
