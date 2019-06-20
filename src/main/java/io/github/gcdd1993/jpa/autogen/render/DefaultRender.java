@@ -5,6 +5,9 @@ import io.github.gcdd1993.jpa.autogen.config.ModuleConfig;
 import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
 import io.github.gcdd1993.jpa.autogen.util.FreeMarkerUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO
  *
@@ -15,7 +18,7 @@ public class DefaultRender implements IRender {
 
     private final CodeGeneratorConfig config;
 
-    private RenderingResponse lastRenderingResponse;
+    private Map<String, RenderingResponse> lastRenderingResponseMap = new HashMap<>();
 
     public DefaultRender(CodeGeneratorConfig config) {
         this.config = config;
@@ -25,7 +28,7 @@ public class DefaultRender implements IRender {
     public final RenderingResponse render(EntityInfo entityInfo, String module) {
         RenderingRequest renderingRequest = new RenderingRequest();
 
-        renderingRequest.setLastRenderResponse(lastRenderingResponse);
+        renderingRequest.setLastRenderResponse(lastRenderingResponseMap);
 
         ModuleConfig moduleConfig = config.getModuleConfigMap().get(module);
         renderingRequest.setClassName(entityInfo.getSimpleName() + moduleConfig.getClassNameSuffix());
@@ -40,8 +43,9 @@ public class DefaultRender implements IRender {
         renderingRequest.setDate(config.getDate());
 
         // use freemarker to render code.
-        lastRenderingResponse = FreeMarkerUtils.process(renderingRequest);
+        RenderingResponse lastRenderingResponse = FreeMarkerUtils.process(renderingRequest);
 
+        lastRenderingResponseMap.put(module, lastRenderingResponse);
         return lastRenderingResponse;
     }
 

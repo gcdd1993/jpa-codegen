@@ -4,6 +4,7 @@ import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 渲染请求
@@ -24,5 +25,5 @@ public class RenderingRequest {
     private String comments;
     private List<String> fields;
     private EntityInfo entity;
-    private RenderingResponse lastRenderResponse;
+    private Map<String, RenderingResponse> lastRenderResponse;
 }
