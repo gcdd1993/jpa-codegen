@@ -1,5 +1,4 @@
 import io.github.gcdd1993.jpa.autogen.CodeGenerator;
-import io.github.gcdd1993.jpa.autogen.render.RepositoryRender;
 import org.junit.Test;
 
 /**
@@ -14,7 +13,8 @@ public class ApplicationTest {
     public void generate() {
 
         new CodeGenerator("/codegen.properties")
-                .registerRender(RepositoryRender.class)
+                .registerRender("repository")
+                .registerRender("service")
                 .generate();
 
     }

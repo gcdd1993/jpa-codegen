@@ -24,4 +24,5 @@ public class RenderingRequest {
     private String comments;
     private List<String> fields;
     private EntityInfo entity;
+    private RenderingResponse lastRenderResponse;
 }

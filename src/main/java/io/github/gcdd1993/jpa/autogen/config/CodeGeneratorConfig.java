@@ -2,6 +2,9 @@ package io.github.gcdd1993.jpa.autogen.config;
 
 import lombok.Data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO
  *
@@ -11,14 +14,12 @@ import lombok.Data;
 @Data
 public class CodeGeneratorConfig {
     private String entityPackage;
+    private String basePackage;
     private String ftlPath;
     private String author;
     private String date;
     private String comments;
     private boolean forceOverride;
 
-    private ModuleConfig repository;
-    private ModuleConfig service;
-    private ModuleConfig form;
-    private ModuleConfig controller;
+    private Map<String, ModuleConfig> moduleConfigMap = new HashMap<>();
 }

@@ -9,5 +9,5 @@ import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
  * Created on 2019/6/20.
  */
 public interface IRender {
-    RenderingResponse render(EntityInfo entityInfo);
+    RenderingResponse render(EntityInfo entityInfo, String module);
 }
