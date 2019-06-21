@@ -1,6 +1,5 @@
 package io.github.gcdd1993.jpa.codegen.util;
 
-import freemarker.cache.StringTemplateLoader;
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -12,11 +11,13 @@ import io.github.gcdd1993.jpa.codegen.render.RenderingResponse;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 /**
  * TODO
@@ -43,19 +44,13 @@ public class FreeMarkerUtils {
      * @return 渲染结果
      */
     private static String render(RenderingRequest renderingRequest) {
-        StringTemplateLoader templateLoader = new StringTemplateLoader();
-        String source;
-        try (InputStream is = ResourceReader.getResourceAsStream(renderingRequest.getFtlName());
-             BufferedReader buffer = new BufferedReader(new InputStreamReader(is));
-             Writer writer = new StringWriter()) {
-            source = buffer.lines().collect(Collectors.joining("\n"));
-            templateLoader.putTemplate("template", source);
-            configuration.setTemplateLoader(templateLoader);
+        try (Writer writer = new StringWriter()) {
+            configuration.setDirectoryForTemplateLoading(new File(renderingRequest.getFtlPath()));
             configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             configuration.setObjectWrapper(new BeansWrapper(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS));
             configuration.setWhitespaceStripping(true);
 
-            Template template = configuration.getTemplate("template");
+            Template template = configuration.getTemplate(renderingRequest.getFtlName());
             template.process(renderingRequest, writer);
             return writer.toString();
         } catch (TemplateException | IOException e) {
@@ -78,7 +73,7 @@ public class FreeMarkerUtils {
         String code = render(renderingRequest);
         try {
             if (code != null) {
-                saveToFile(code, renderingRequest.getSavePath(), renderingRequest.isCover());
+                saveToFile(code, renderingRequest.getSavePath(), renderingRequest.getClassName() + ".java", renderingRequest.isCover());
             }
             response.setSuccess(true);
         } catch (IOException e) {
@@ -87,11 +82,25 @@ public class FreeMarkerUtils {
         return response;
     }
 
-    private static void saveToFile(String code, String filePath, boolean cover) throws IOException {
-        Path path = Paths.get(filePath);
-        if (Files.exists(path) && !cover) {
-            return;
+    private static void saveToFile(String code, String filePath, String fileName, boolean cover) throws IOException {
+        String finalFileName = filePath + fileName;
+        Path path = Paths.get(finalFileName);
+        if (Files.exists(path)) {
+            // check for cove
+            if (!cover) {
+                log.info("skip {} due to file exists.", fileName);
+                return;
+            } else {
+                Files.delete(path);
+            }
         }
+
+        // check for dir
+        Path dirPath = Paths.get(filePath);
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+
         Files.createFile(path);
         Files.write(path, code.getBytes());
 

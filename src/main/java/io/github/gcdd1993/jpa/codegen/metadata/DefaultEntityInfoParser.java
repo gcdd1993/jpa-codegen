@@ -79,6 +79,11 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
                 fields.add(fieldInfo);
             }
         }
+        // try from super class
+        Class<?> maybeExists = clazz.getSuperclass();
+        if (!Object.class.equals(maybeExists)) {
+            fields.addAll(parseField(maybeExists));
+        }
         return fields;
     }
 
@@ -100,7 +105,13 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
                 IdInfo idInfo = new IdInfo();
                 idInfo.setClassName(field.getType().getSimpleName());
                 idInfo.setPackageName(field.getType().getTypeName());
+                return idInfo;
             }
+        }
+        // try from super class
+        Class<?> maybeExists = clazz.getSuperclass();
+        if (!Object.class.equals(maybeExists)) {
+            return parseId(maybeExists);
         }
         return null;
     }

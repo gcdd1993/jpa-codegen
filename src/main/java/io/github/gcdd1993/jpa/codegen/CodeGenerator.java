@@ -98,7 +98,7 @@ public class CodeGenerator {
         ModuleConfig moduleConfig = new ModuleConfig();
         moduleConfig.setClassNameSuffix(properties.getProperty(module + ".class.suffix",
                 module.substring(0, 1).toUpperCase().concat(module.substring(1))));
-        moduleConfig.setFtlName(config.getFtlPath() + properties.getProperty(module + ".ftlName", module + ".ftl"));
+        moduleConfig.setFtlName(properties.getProperty(module + ".ftlName", module + ".ftl"));
 
         String packageName = properties.getProperty(module + ".package");
         if (packageName != null) {

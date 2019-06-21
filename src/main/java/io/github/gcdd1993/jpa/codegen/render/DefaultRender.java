@@ -40,6 +40,7 @@ public class DefaultRender implements IRender {
             renderingRequest.setSavePath("src/main/java/" + packageName.replace(".", "/") + "/");
         }
         renderingRequest.setFtlName(moduleConfig.getFtlName());
+        renderingRequest.setFtlPath(config.getFtlPath());
         renderingRequest.setCover(config.isCover());
 
         renderingRequest.setEntity(entityInfo);
@@ -51,11 +52,23 @@ public class DefaultRender implements IRender {
         // fields ，只支持基本类型映射
         renderingRequest.setOtherParams(config.getOtherParams());
 
+        // check for other imports
+        renderingRequest.setImports(checkImports(entityInfo));
+
         // use freemarker to render code.
         RenderingResponse lastRenderingResponse = FreeMarkerUtils.process(renderingRequest);
 
         lastRenderingResponseMap.put(module, lastRenderingResponse);
         return lastRenderingResponse;
+    }
+
+    private List<String> checkImports(EntityInfo entityInfo) {
+        List<String> imports = new ArrayList<>();
+        String packageName = entityInfo.getId().getPackageName();
+        if (!"java.lang".equals(packageName)) {
+            imports.add(packageName);
+        }
+        return imports;
     }
 
 }
