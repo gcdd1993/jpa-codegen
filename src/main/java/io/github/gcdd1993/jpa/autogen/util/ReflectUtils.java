@@ -133,4 +133,11 @@ public class ReflectUtils {
         return new File(packagePath).listFiles(file -> (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory());
     }
 
+    public static boolean hasAnnotation(Field field, Class<? extends Annotation> annotationType) {
+        Annotation maybeExist = field.getAnnotation(annotationType);
+
+        maybeExist.annotationType().
+        return maybeExist != null;
+    }
+
 }

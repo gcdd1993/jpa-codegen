@@ -2,8 +2,8 @@ package io.github.gcdd1993.jpa.autogen;
 
 import io.github.gcdd1993.jpa.autogen.config.CodeGeneratorConfig;
 import io.github.gcdd1993.jpa.autogen.config.ModuleConfig;
-import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
-import io.github.gcdd1993.jpa.autogen.model.EntityInfoParser;
+import io.github.gcdd1993.jpa.autogen.metadata.EntityInfo;
+import io.github.gcdd1993.jpa.autogen.metadata.EntityInfoParser;
 import io.github.gcdd1993.jpa.autogen.render.DefaultRender;
 import io.github.gcdd1993.jpa.autogen.render.IRender;
 import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;

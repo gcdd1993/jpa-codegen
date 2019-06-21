@@ -1,6 +1,6 @@
 package io.github.gcdd1993.jpa.autogen.render;
 
-import io.github.gcdd1993.jpa.autogen.model.EntityInfo;
+import io.github.gcdd1993.jpa.autogen.metadata.EntityInfo;
 import lombok.Data;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package io.github.gcdd1993.jpa.autogen.config;
 import lombok.Data;
 
 /**
- * TODO
+ * 模块名称
  *
  * @author gaochen
  * Created on 2019/6/20.
