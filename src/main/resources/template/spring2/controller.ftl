@@ -37,7 +37,7 @@ public class ${className} extends BaseController {
         return created(${entity.className?uncap_first});
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(${entity.id.className} id) {
         ${lastRenderResponse.service.className?uncap_first}.delete(id);
         return deleted();
@@ -45,7 +45,7 @@ public class ${className} extends BaseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody @Validated ${lastRenderResponse.form.className} form,
-                                                @PathVariable("id") ${entity.id.className} id) {
+                                    @PathVariable("id") ${entity.id.className} id) {
         ${entity.className} ${entity.className?uncap_first} = ${lastRenderResponse.service.className?uncap_first}.update(form, id);
         return created(${entity.className?uncap_first});
     }
