@@ -3,7 +3,6 @@ package io.github.gcdd1993.jpa.autogen.render;
 import io.github.gcdd1993.jpa.autogen.metadata.EntityInfo;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +21,6 @@ public class RenderingRequest {
     private String author;
     private String date;
     private String comments;
-    private List<EntityInfo.FieldItem> fields;
     private EntityInfo entity;
     private Map<String, RenderingResponse> lastRenderResponse;
     private Map<String, String> otherParams;

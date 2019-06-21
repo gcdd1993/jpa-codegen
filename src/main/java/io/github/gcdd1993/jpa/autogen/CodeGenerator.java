@@ -3,12 +3,12 @@ package io.github.gcdd1993.jpa.autogen;
 import io.github.gcdd1993.jpa.autogen.config.CodeGeneratorConfig;
 import io.github.gcdd1993.jpa.autogen.config.ModuleConfig;
 import io.github.gcdd1993.jpa.autogen.metadata.EntityInfo;
-import io.github.gcdd1993.jpa.autogen.metadata.EntityInfoParser;
-import io.github.gcdd1993.jpa.autogen.render.DefaultRender;
+import io.github.gcdd1993.jpa.autogen.metadata.IEntityParser;
 import io.github.gcdd1993.jpa.autogen.render.IRender;
 import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -24,6 +24,9 @@ public class CodeGenerator {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
+    private static final String DEFAULT_ENTITY_PARSER_CLASS_NAME = "io.github.gcdd1993.jpa.autogen.metadata.DefaultEntityInfoParser";
+    private static final String DEFAULT_RENDER_CLASS_NAME = "io.github.gcdd1993.jpa.autogen.render.DefaultRender";
+
     private static final String SRC_PATH = "src/main/";
 
     private CodeGeneratorConfig config;
@@ -31,6 +34,10 @@ public class CodeGenerator {
     private Properties properties = new Properties();
 
     private List<String> moduleList = new LinkedList<>();
+
+    private IEntityParser entityParser;
+
+    private IRender render;
 
     public CodeGenerator(String configLocation) {
         try {
@@ -65,7 +72,15 @@ public class CodeGenerator {
             }
             config.setOtherParams(otherParams);
 
-        } catch (IOException e) {
+            // 实体解析器
+            Class<?> entityParserClass = Class.forName(properties.getProperty("entityParser", DEFAULT_ENTITY_PARSER_CLASS_NAME));
+            entityParser = (IEntityParser) entityParserClass.newInstance();
+
+            // 渲染器
+            Class<?> renderClass = Class.forName(properties.getProperty("render", DEFAULT_RENDER_CLASS_NAME));
+            render = (IRender) renderClass.getConstructor(CodeGeneratorConfig.class).newInstance(config);
+
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -92,13 +107,13 @@ public class CodeGenerator {
     }
 
     public void generate() {
-        List<Class<?>> entityClasses = ReflectUtils.getClassListByAnnotation(config.getEntityPackage(), "javax.persistence.Entity");
+        List<Class<?>> entityClasses = ReflectUtils.getClassListByAnnotation(config.getEntityPackage(), javax.persistence.Entity.class);
         List<EntityInfo> entityInfos = entityClasses.stream()
-                .map(EntityInfoParser::parse)
+                .map(entityParser::parse)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        IRender render = new DefaultRender(config);
+//        IRender render = new DefaultRender(config);
 
         entityInfos.forEach(entityInfo ->
                 moduleList.forEach(module -> render.render(entityInfo, module)));

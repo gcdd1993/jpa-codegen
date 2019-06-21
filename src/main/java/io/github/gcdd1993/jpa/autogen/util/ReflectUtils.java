@@ -40,15 +40,14 @@ public class ReflectUtils {
     /**
      * 获取指定包名下的所有类（可根据注解进行过滤）
      *
-     * @param packageName         包名
-     * @param annotationClassName 注解类
+     * @param packageName     包名
+     * @param annotationClass 注解类
      * @return 类
      */
     @SuppressWarnings("unchecked")
-    public static List<Class<?>> getClassListByAnnotation(String packageName, String annotationClassName) {
+    public static List<Class<?>> getClassListByAnnotation(String packageName, Class<? extends Annotation> annotationClass) {
         List<Class<?>> classList = new ArrayList<>();
         try {
-            Class<? extends Annotation> annotationClass = (Class<? extends Annotation>) Class.forName(annotationClassName);
             Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName.replaceAll("\\.", "/"));
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
@@ -135,8 +134,6 @@ public class ReflectUtils {
 
     public static boolean hasAnnotation(Field field, Class<? extends Annotation> annotationType) {
         Annotation maybeExist = field.getAnnotation(annotationType);
-
-        maybeExist.annotationType().
         return maybeExist != null;
     }
 

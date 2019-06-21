@@ -18,4 +18,5 @@ public interface IRender {
      * @return 渲染结果
      */
     RenderingResponse render(EntityInfo entityInfo, String module);
+
 }
