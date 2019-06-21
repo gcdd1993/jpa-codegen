@@ -1,5 +1,6 @@
-package io.github.gcdd1993.jpa.autogen.util;
+package io.github.gcdd1993.jpa.codegen.util;
 
+import io.github.gcdd1993.jpa.codegen.exception.JpaCodegenException;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
 
@@ -75,7 +76,7 @@ public class ReflectUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new JpaCodegenException(String.format("get class from package %s by annotation %s error", packageName, annotationClass.getSimpleName()), e);
         }
         return classList;
     }
@@ -124,7 +125,7 @@ public class ReflectUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new JpaCodegenException("add class by annotation error", e);
         }
     }
 

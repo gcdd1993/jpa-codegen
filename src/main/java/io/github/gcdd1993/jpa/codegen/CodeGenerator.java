@@ -1,14 +1,19 @@
-package io.github.gcdd1993.jpa.autogen;
+package io.github.gcdd1993.jpa.codegen;
 
-import io.github.gcdd1993.jpa.autogen.config.CodeGeneratorConfig;
-import io.github.gcdd1993.jpa.autogen.config.ModuleConfig;
-import io.github.gcdd1993.jpa.autogen.metadata.EntityInfo;
-import io.github.gcdd1993.jpa.autogen.metadata.IEntityParser;
-import io.github.gcdd1993.jpa.autogen.render.IRender;
-import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;
+import io.github.gcdd1993.jpa.codegen.config.CodeGeneratorConfig;
+import io.github.gcdd1993.jpa.codegen.config.ModuleConfig;
+import io.github.gcdd1993.jpa.codegen.exception.JpaCodegenException;
+import io.github.gcdd1993.jpa.codegen.metadata.DefaultEntityInfoParser;
+import io.github.gcdd1993.jpa.codegen.metadata.EntityInfo;
+import io.github.gcdd1993.jpa.codegen.metadata.IEntityParser;
+import io.github.gcdd1993.jpa.codegen.render.DefaultRender;
+import io.github.gcdd1993.jpa.codegen.render.IRender;
+import io.github.gcdd1993.jpa.codegen.util.ReflectUtils;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -20,12 +25,10 @@ import java.util.stream.Collectors;
  * @author gaochen
  * Created on 2019/6/18.
  */
+@Slf4j
 public class CodeGenerator {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-
-    private static final String DEFAULT_ENTITY_PARSER_CLASS_NAME = "io.github.gcdd1993.jpa.autogen.metadata.DefaultEntityInfoParser";
-    private static final String DEFAULT_RENDER_CLASS_NAME = "io.github.gcdd1993.jpa.autogen.render.DefaultRender";
 
     private static final String SRC_PATH = "src/main/";
 
@@ -41,7 +44,7 @@ public class CodeGenerator {
 
     public CodeGenerator(String configLocation) {
         try {
-            properties.load(CodeGenerator.class.getResourceAsStream(configLocation));
+            properties.load(new FileInputStream(new File(configLocation)));
 
             config = new CodeGeneratorConfig();
             String entityPackage = properties.getProperty("entity.package");
@@ -73,15 +76,15 @@ public class CodeGenerator {
             config.setOtherParams(otherParams);
 
             // 实体解析器
-            Class<?> entityParserClass = Class.forName(properties.getProperty("entityParser", DEFAULT_ENTITY_PARSER_CLASS_NAME));
-            entityParser = (IEntityParser) entityParserClass.newInstance();
+            entityParser = new DefaultEntityInfoParser();
 
             // 渲染器
-            Class<?> renderClass = Class.forName(properties.getProperty("render", DEFAULT_RENDER_CLASS_NAME));
-            render = (IRender) renderClass.getConstructor(CodeGeneratorConfig.class).newInstance(config);
+            render = new DefaultRender(config);
 
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException | IOException e) {
-            throw new RuntimeException(e);
+            log.info("init code generator success.");
+
+        } catch (IOException e) {
+            throw new JpaCodegenException("init code generator failed.", e);
         }
     }
 
@@ -113,16 +116,21 @@ public class CodeGenerator {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-//        IRender render = new DefaultRender(config);
+        if (!entityInfos.isEmpty()) {
+            log.info("find {} entity classes, now start generate code.", entityInfos.size());
 
-        entityInfos.forEach(entityInfo ->
-                moduleList.forEach(module -> render.render(entityInfo, module)));
+            entityInfos.forEach(entityInfo ->
+                    moduleList.forEach(module -> render.render(entityInfo, module)));
+        } else {
+            log.warn("find none entity class, please check your entity package is true.");
+        }
     }
 
     /**
      * 注册渲染组件
      *
      * @param module 模块名
+     * @return 代码生成器本身
      */
     public CodeGenerator registerRender(String module) {
         ModuleConfig moduleConfig = parseModuleConfig(module);

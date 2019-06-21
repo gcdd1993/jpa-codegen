@@ -1,4 +1,4 @@
-package io.github.gcdd1993.jpa.autogen.config;
+package io.github.gcdd1993.jpa.codegen.config;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package io.github.gcdd1993.jpa.autogen.metadata;
+package io.github.gcdd1993.jpa.codegen.metadata;
 
 /**
  * 实体解析器

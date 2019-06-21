@@ -1,6 +1,6 @@
-package io.github.gcdd1993.jpa.autogen.metadata;
+package io.github.gcdd1993.jpa.codegen.metadata;
 
-import io.github.gcdd1993.jpa.autogen.util.ReflectUtils;
+import io.github.gcdd1993.jpa.codegen.util.ReflectUtils;
 
 import javax.persistence.IdClass;
 import javax.persistence.Table;

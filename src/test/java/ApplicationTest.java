@@ -1,4 +1,4 @@
-import io.github.gcdd1993.jpa.autogen.CodeGenerator;
+import io.github.gcdd1993.jpa.codegen.CodeGenerator;
 import org.junit.Test;
 
 /**

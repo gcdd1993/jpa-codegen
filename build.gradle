@@ -1,7 +1,18 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
+}
+
 plugins {
     id 'java'
     id "io.franzbecker.gradle-lombok" version "3.1.0"
 }
+
+apply plugin: 'com.novoda.bintray-release'
 
 group 'io.github.gcdd1993'
 version '1.0.0.RELEASE'
@@ -12,16 +23,36 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+javadoc {
+    options.addStringOption('encoding', 'UTF-8')
+}
+
 repositories {
     maven() {
         url 'http://maven.aliyun.com/nexus/content/groups/public/'
     }
     mavenCentral()
+    jcenter()
+}
+
+publish {
+    userOrg = 'gcdd1993'
+    groupId = 'io.github.gcdd1993'
+    artifactId = 'jpa-codegen'
+    publishVersion = project.version
+    desc = 'A simple gradle plugins to generate jpa crud code'
+    website = 'https://github.com/gcdd1993/jpa-codegen'
+}
+
+jar {
+    enabled = true
 }
 
 dependencies {
+    compile gradleApi()
+    compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'org.freemarker:freemarker:2.3.28'
-    compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.5.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.5.RELEASE'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

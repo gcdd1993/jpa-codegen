@@ -1,9 +1,9 @@
-package io.github.gcdd1993.jpa.autogen.render;
+package io.github.gcdd1993.jpa.codegen.render;
 
-import io.github.gcdd1993.jpa.autogen.config.CodeGeneratorConfig;
-import io.github.gcdd1993.jpa.autogen.config.ModuleConfig;
-import io.github.gcdd1993.jpa.autogen.metadata.EntityInfo;
-import io.github.gcdd1993.jpa.autogen.util.FreeMarkerUtils;
+import io.github.gcdd1993.jpa.codegen.config.CodeGeneratorConfig;
+import io.github.gcdd1993.jpa.codegen.config.ModuleConfig;
+import io.github.gcdd1993.jpa.codegen.metadata.EntityInfo;
+import io.github.gcdd1993.jpa.codegen.util.FreeMarkerUtils;
 
 import java.util.*;
 
@@ -49,7 +49,6 @@ public class DefaultRender implements IRender {
         renderingRequest.setDate(config.getDate());
 
         // fields ，只支持基本类型映射
-        renderingRequest.setFields(entityInfo.getFields());
         renderingRequest.setOtherParams(config.getOtherParams());
 
         // use freemarker to render code.
