@@ -1,6 +1,12 @@
+[TOC]
+
+[![Build Status](https://travis-ci.org/gcdd1993/jpa-codegen.svg?branch=master)](https://travis-ci.org/gcdd1993/jpa-codegen)
+
 # 简介
 
-这是一款基于Freemarker模板驱动的代码生成器。依据现有的实体类代码，自动生成CRUD代码，解放双手，加快开发。
+这是一款基于`Freemarker`模板驱动的代码生成器。
+
+依据现有的实体类代码，自动生成CRUD代码，解放双手，加快开发速度。
 
 生成的代码包括但不仅限于（可以自定义生成模块）
 
@@ -171,7 +177,7 @@ custom.additional.comment=this is additional comment
 
 在模板中可以使用`${otherParams.additional_comment}`获取到该配置。
 
-要注意的是：自定义配置**使用`custom`开头**，后面的**配置会将`.`替换为`_`**作为`FreeMarker`模板的key，例如上述的`additional.comment`使用`additional_comment`获取。
+要注意的是：自定义配置**使用`custom`开头**，后面的**配置会将.替换为_**作为`FreeMarker`模板的key，例如上述的`additional.comment`使用`${otherParams.additional_comment}`获取。
 
 # 什么是模块？
 
@@ -189,7 +195,7 @@ custom.additional.comment=this is additional comment
 
 - repository.flag=entity.repo
 
-模块标识符，生成的代码包名由**实体类名.replace(实体标识符,模块标识符)**来确认。
+模块标识符，生成的代码包名由**实体类将实体标识符替换为模块标识符**来确认。
 
 如
 
