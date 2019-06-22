@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class ModuleConfig {
+    private String flag;
     private String packageName;
     private String classNameSuffix;
     private String ftlName;

@@ -99,12 +99,7 @@ public class CodeGenerator {
         moduleConfig.setClassNameSuffix(properties.getProperty(module + ".class.suffix",
                 module.substring(0, 1).toUpperCase().concat(module.substring(1))));
         moduleConfig.setFtlName(properties.getProperty(module + ".ftlName", module + ".ftl"));
-
-        String packageName = properties.getProperty(module + ".package");
-        if (packageName != null) {
-            moduleConfig.setPackageName(packageName);
-            moduleConfig.setSavePath(SRC_PATH + "java/" + packageName.replace(".", "/") + "/");
-        }
+        moduleConfig.setFlag(properties.getProperty(module + ".flag", module));
 
         return moduleConfig;
     }

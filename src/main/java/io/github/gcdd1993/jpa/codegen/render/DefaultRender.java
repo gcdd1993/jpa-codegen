@@ -31,15 +31,12 @@ public class DefaultRender implements IRender {
 
         ModuleConfig moduleConfig = config.getModuleConfigMap().get(module);
         renderingRequest.setClassName(entityInfo.getClassName() + moduleConfig.getClassNameSuffix());
-        if (moduleConfig.getPackageName() != null) {
-            renderingRequest.setPackageName(moduleConfig.getPackageName());
-            renderingRequest.setSavePath(moduleConfig.getSavePath());
-        } else {
-            String packageName = entityInfo.getPackageName().replace(config.getEntityFlag(), module);
-            renderingRequest.setPackageName(packageName);
-            renderingRequest.setSavePath("src/main/java/" + packageName.replace(".", "/") + "/");
-        }
+        String packageName = entityInfo.getPackageName().replace(config.getEntityFlag(), moduleConfig.getFlag());
+
+        renderingRequest.setPackageName(packageName);
+        renderingRequest.setSavePath("src/main/java/" + packageName.replace(".", "/") + "/");
         renderingRequest.setFtlName(moduleConfig.getFtlName());
+
         renderingRequest.setFtlPath(config.getFtlPath());
         renderingRequest.setCover(config.isCover());
 
