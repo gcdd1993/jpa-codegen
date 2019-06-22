@@ -1,5 +1,7 @@
 [TOC]
 
+[![Build Status](https://travis-ci.org/gcdd1993/jpa-codegen.svg?branch=master)](https://travis-ci.org/gcdd1993/jpa-codegen)
+
 # 简介
 
 这是一款基于`Freemarker`模板驱动的代码生成器。
