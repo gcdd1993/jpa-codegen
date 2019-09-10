@@ -31,7 +31,7 @@ public class DefaultRender implements IRender {
 
         ModuleConfig moduleConfig = config.getModuleConfigMap().get(module);
         renderingRequest.setClassName(entityInfo.getClassName() + moduleConfig.getClassNameSuffix());
-        String packageName = entityInfo.getPackageName().replace(config.getEntityFlag(), moduleConfig.getFlag());
+        String packageName = entityInfo.getPackageName().replace(entityInfo.getFlag(), moduleConfig.getFlag());
 
         renderingRequest.setPackageName(packageName);
         renderingRequest.setSavePath("src/main/java/" + packageName.replace(".", "/") + "/");
