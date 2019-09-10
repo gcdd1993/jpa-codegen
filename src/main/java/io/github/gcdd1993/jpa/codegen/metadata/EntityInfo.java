@@ -21,6 +21,11 @@ public class EntityInfo extends BaseClassInfo {
     private String tableName;
 
     /**
+     * 用来替换的报名标记符
+     */
+    private String flag;
+
+    /**
      * 主键类名
      */
     private IdInfo id;

@@ -15,7 +15,7 @@ plugins {
 apply plugin: 'com.novoda.bintray-release'
 
 group 'io.github.gcdd1993'
-version '1.0.0.RELEASE'
+version 'v1.0.1'
 
 sourceCompatibility = 1.8
 
