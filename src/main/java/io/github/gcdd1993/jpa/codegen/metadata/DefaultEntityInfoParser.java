@@ -33,7 +33,6 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
         String packageName = clazz.getPackage().getName();
 
         entityInfo.setPackageName(packageName);
-        entityInfo.setFlag(packageName.substring(packageName.lastIndexOf(".") + 1));
 
         Table tableAnnotation = clazz.getAnnotation(javax.persistence.Table.class);
         if (tableAnnotation != null) {

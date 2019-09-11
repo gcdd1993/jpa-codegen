@@ -45,7 +45,7 @@ maven {
 }
 dependencies {
     // jpa code generator
-    testCompile 'io.github.gcdd1993:jpa-codegen:v1.0.1'
+    testCompile 'io.github.gcdd1993:jpa-codegen:v1.0.2'
     testCompile 'org.freemarker:freemarker:2.3.28'
 }
 ```
@@ -65,8 +65,8 @@ cover=false
 template.dir=src/test/resources/template/
 ## 实体类包名 Deprecated从v1.0.1开始从配置文件中移除
 - entity.package=com.maxtropy.sample.entity
-## 实体类标识符 Deprecated从v1.0.1开始从配置文件中移除
-- entity.flag=entity
+## 实体类标识符
+entity.flag=entity
 ## 以下配置是模块配置(格式 模块名.配置名)，必须在模板目录下提供与模块名相同的模板
 ## 生成的代码后缀
 repository.suffix=Repository
