@@ -15,6 +15,7 @@ import java.util.Map;
  */
 @Data
 public class CodeGeneratorConfig {
+    private String entityFlag;
     private List<Class<?>> entityClasses = new ArrayList<>(256);
     private String ftlPath;
     private String author;

@@ -55,6 +55,9 @@ public class CodeGenerator {
             config.setFtlPath(properties.getProperty("template.dir", SRC_PATH + "resources/template/"));
             config.setCover(Boolean.parseBoolean(properties.getProperty("cover", "false")));
 
+            // io.github.gcdd1993.entity -> entity flag is entity
+            config.setEntityFlag(properties.getProperty("entity.flag", "entity"));
+
             // custom other params
             Map<String, String> otherParams = new HashMap<>(256);
             for (Object key : properties.keySet()) {
